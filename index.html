@@ -102,7 +102,10 @@
                                                 <button class="btn-open-invitation btn btn-primary rounded-0 animate__animated animate__fadeInUp animate__slow" style="font-size:14.4px;background-color:transparent;border-color:var(--inv-border);color:var(--inv-border);">OPEN INVITATION</button>
                                             </div>
                                         </div>
-                                    </div>
+                                              <div class="text-center">
+                                                <p class="mb-1">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+                                                <h2 id="guest-name" style="font-weight: bold; margin-top: 10px;">-</h2>
+                                            </div>
                                 </div>
                             </div>
                         </li>
@@ -640,6 +643,28 @@
         }
         document.addEventListener('DOMContentLoaded', muatUcapan);
     </script>
-
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        let namaTamu = urlParams.get('to');
+                        
+                        if (namaTamu) {
+                            // Mengubah tanda plus (+) menjadi spasi agar rapi
+                            namaTamu = namaTamu.replace(/[+]/g, ' ');
+                            
+                            // Tampilkan di halaman cover
+                            const displayElement = document.getElementById('guest-name');
+                            if (displayElement) {
+                                displayElement.innerText = namaTamu;
+                            }
+                            
+                            // Otomatis isi kolom Nama di form RSVP (jika ada)
+                            const inputNama = document.querySelector('input[name="nama"]');
+                            if (inputNama) {
+                                inputNama.value = namaTamu;
+                            }
+                        }
+                    });
+                </script>
 </body>
 </html>
