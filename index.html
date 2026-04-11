@@ -581,35 +581,38 @@
 
         if (form) {
             form.addEventListener('submit', e => {
-                e.preventDefault();
+                e.preventDefault(); 
+                
                 btnKirim.disabled = true;
                 btnKirim.innerText = "Mengirim...";
-
+        
                 const formData = {
-                    nama: form.querySelector('input[name="nama"]').value,
-                    kehadiran: form.querySelector('select[name="kehadiran"]').value,
-                    jumlah_tamu: form.querySelector('input[name="jumlah"]').value,
-                    ucapan: form.querySelector('textarea[name="ucapan"]').value
+                    nama: form.querySelector('[name="nama"]').value,
+                    kehadiran: form.querySelector('[name="kehadiran"]').value,
+                    jumlah: form.querySelector('[name="jumlah"]').value, // Sesuai data.jumlah di App Script
+                    pesan: form.querySelector('[name="ucapan"]').value  // MENGIRIM SEBAGAI 'pesan' AGAR DITERIMA APP SCRIPT
                 };
-
-                fetch(scriptURL, { method: 'POST', body: JSON.stringify(formData) })
+        
+                fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                })
                 .then(response => {
                     alert('Terima kasih!');
                     form.reset();
-                    muatUcapan(); // Memanggil fungsi muat ucapan di bawah
+                    muatUcapan(); // Refresh daftar ucapan
                     form.style.display = 'none';
                     if (rsvpMessage) rsvpMessage.style.display = 'block';
                     btnKirim.disabled = false;
-                    btnKirim.innerText = "Kirim Kehadiran";
+                    btnKirim.innerText = "Kirim Konfirmasi";
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
                     btnKirim.disabled = false;
-                    btnKirim.innerText = "Kirim Kehadiran";
+                    btnKirim.innerText = "Gagal, Coba Lagi";
                 });
             });
         }
-    </script>
 
     <script>
         const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbzpQR0gghrq0HPJfCFYp1aZuTT973ExHMCHYRs7nRQ7cop7bbTlIoatN_HH2dbzWIqd/exec';
