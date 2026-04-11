@@ -689,35 +689,69 @@ var openInvitation = function openInvitation(event) {
     }
   }
 
-  // play music
-  playMusic(true);
-  function updateCoverHeight() {
-    cover.style.height = window.innerHeight > 500 ? "".concat(window.innerHeight, "px") : "500px";
-  }
-  window.addEventListener('resize', updateCoverHeight);
-  updateCoverHeight();
-  if (navigator.userAgent.indexOf("UCBrowser") != -1 || navigator.userAgent.indexOf("MiuiBrowser") != -1 || navigator.userAgent.includes("OppoBrowser") || navigator.userAgent.includes("HeyTapBrowser")) {
-    console.log("Browser not support portrait full screen mode");
-  } else {
-    openFullScreen();
+  var openInvitation = function openInvitation(event) {
+  var cover = document.querySelector(".satumomen_cover");
+  var music = document.getElementById("audio"); // Pastikan ID sesuai
+
+  // 1. PAKSA MUSIK JALAN DULUAN (Interaksi User)
+  if (music) {
+    music.muted = false;
+    music.volume = 1.0;
+    var playPromise = music.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.catch(function(error) {
+        console.log("Autoplay dicegah, mencoba alternatif...");
+        // Jika gagal, kita coba play lagi tanpa fullscreen
+      });
+    }
   }
 
-  // hide the cover
+  // 2. LOGIKA FULLSCREEN (Dibuat opsional agar tidak merusak musik)
+  var updateCoverHeight = function updateCoverHeight() {
+    cover.style.height = window.innerWidth <= 500 ? "".concat(window.innerHeight, "px") : "500px";
+  };
+  
+  window.addEventListener('resize', updateCoverHeight);
+  updateCoverHeight();
+
+  // Cek apakah browser mendukung fullscreen sebelum eksekusi
+  if (!/UCBrowser|MiuiBrowser|OppoBrowser|HeyTapBrowser/i.test(navigator.userAgent)) {
+    try {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+      }
+    } catch (e) {
+      console.log("Fullscreen ditolak browser HP");
+    }
+  }
+
+  // 3. TRANSISI BUKA UNDANGAN
   document.body.style.overflowY = '';
   document.querySelector(".cover").style.position = 'relative';
-  (_document$querySelect2 = document.querySelector(".not-open")) === null || _document$querySelect2 === void 0 || _document$querySelect2.classList.add("opened");
-  (_document$querySelect3 = document.querySelector(".not-open")) === null || _document$querySelect3 === void 0 || _document$querySelect3.classList.remove("not-open");
-  event === null || event === void 0 || (_event$target = event.target) === null || _event$target === void 0 || _event$target.remove();
+  
+  var notOpen = document.querySelector(".not-open");
+  if (notOpen) {
+    notOpen.classList.add("opened");
+    notOpen.classList.remove("not-open");
+  }
+
+  if (event && event.target) {
+    event.target.remove();
+  }
+
   setTimeout(function () {
-    cover.style.position = 'relative';
-    document.querySelector(".blank-canvas").style.display = "none";
+    if (cover) cover.style.position = 'relative';
+    var canvas = document.querySelector(".blank-canvas");
+    if (canvas) canvas.style.display = "none";
     window.scroll({
       top: window.innerHeight,
       behavior: 'smooth'
     });
   }, 1000);
 };
-
 // buka undangan
 var btnOpenInvitation = document.getElementsByClassName("btn-open-invitation");
 for (var _i2 = 0; _i2 < btnOpenInvitation.length; _i2++) {
