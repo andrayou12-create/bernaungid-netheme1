@@ -541,108 +541,83 @@
             }
             checkBrowser()
         </script>
-        <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbykQIOXpblrVMmjzu533xSGLXahQbpDfS8kvP5ykHRaK1-xKnQlv_q8T-t_R8iQ9kY/exec';
-    const form = document.querySelector('#rsvpForm');
-    const btnKirim = document.querySelector('#btnKirim');
-    const list = document.getElementById('ucapanList');
-    const rsvpMessage = document.getElementById('rsvpMessage');
-
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        
-        // Simpan data ke variabel sebelum form di-reset
-        const nama = form.querySelector('input[name="nama"]').value;
-        const ucapan = form.querySelector('textarea[name="ucapan"]').value;
-        const hadir = form.querySelector('select[name="kehadiran"]').value;
-        const jumlah = form.querySelector('input[name="jumlah"]').value;
-
-        btnKirim.disabled = true;
-        btnKirim.innerText = "Mengirim...";
-
-        const formData = {
-            nama: nama,
-            kehadiran: hadir,
-            jumlah_tamu: jumlah,
-            ucapan: ucapan
-        };
-
-        fetch(scriptURL, { 
-            method: 'POST', 
-            body: JSON.stringify(formData)
-        })
-        .then(response => {
-            // 1. Tampilkan pesan sukses
-            alert('Terima kasih!');
-            form.reset();
-            muatUcapan();
-
-            // 2. Masukkan ke list ucapan secara real-time (tampilan sementara agar user senang)
-            if (list) {
-                const itemBaru = `
-                    <div class="mb-3 p-3 animate__animated animate__fadeIn" style="background: rgba(255,255,255,0.05); border-radius: 10px;">
-                        <div class="d-flex justify-content-between">
-                            <strong class="text-danger" style="font-size: 14px;">${nama}</strong>
-                            <span class="badge badge-secondary" style="font-size: 10px;">${hadir}</span>
-                        </div>
-                        <p class="text-light mt-2 mb-0" style="font-size: 13px;">"${ucapan}"</p>
-                        <small class="text-muted" style="font-size: 10px;">Baru saja</small>
-                    </div>
-                `;
-                list.insertAdjacentHTML('afterbegin', itemBaru);
+   <script>
+        window.addEventListener('load', function() {
+            var loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.display = 'none';
             }
-
-            // 3. Reset dan sembunyikan form
-            form.reset();
-            form.style.display = 'none';
-            if (rsvpMessage) {
-                rsvpMessage.style.display = 'block';
-            }
-            
-            btnKirim.disabled = false;
-            btnKirim.innerText = "Kirim Kehadiran";
-        })
-        .catch(error => {
-            console.error('Error!', error.message);
-            alert('Gagal mengirim data, silakan coba lagi.');
-            btnKirim.disabled = false;
-            btnKirim.innerText = "Gagal, Coba Lagi";
         });
-    });
-</script>
-<script>
-    const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbzpQR0gghrq0HPJfCFYp1aZuTT973ExHMCHYRs7nRQ7cop7bbTlIoatN_HH2dbzWIqd/exec'; // Masukkan URL hasil Deploy Apps Script
+    </script>
 
-    function muatUcapan() {
-        fetch(spreadsheetURL)
-            .then(response => response.json())
-            .then(data => {
-                const list = document.getElementById('ucapanList');
-                list.innerHTML = ''; // Kosongkan wadah
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyrjh6DEWBtY_avMe1kgFvH3guflvhE8AXQmzHm03iXQF4rrJ2y2xnwd0KvKKQsFmm9/exec';
+        const form = document.querySelector('#rsvpForm');
+        const btnKirim = document.querySelector('#btnKirim');
+        const list = document.getElementById('ucapanList');
+        const rsvpMessage = document.getElementById('rsvp-message');
 
-                if (data.length === 0) {
-                    list.innerHTML = '<p class="text-center text-muted">Belum ada ucapan.</p>';
-                    return;
-                }
+        if (form) {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                btnKirim.disabled = true;
+                btnKirim.innerText = "Mengirim...";
 
-                data.forEach(item => {
-                    const itemHtml = `
-                        <div class="mb-3 p-3 animate__animated animate__fadeIn" style="background: rgba(255,255,255,0.05); border-radius: 10px;">
-                            <div class="d-flex justify-content-between">
-                                <strong class="text-danger" style="font-size: 14px;">${item.nama}</strong>
-                                <span class="badge badge-secondary" style="font-size: 10px;">${item.kehadiran}</span>
-                            </div>
-                            <p class="text-light mt-2 mb-0" style="font-size: 13px;">"${item.ucapan}"</p>
-                        </div>
-                    `;
-                    list.insertAdjacentHTML('beforeend', itemHtml);
+                const formData = {
+                    nama: form.querySelector('input[name="nama"]').value,
+                    kehadiran: form.querySelector('select[name="kehadiran"]').value,
+                    jumlah_tamu: form.querySelector('input[name="jumlah"]').value,
+                    ucapan: form.querySelector('textarea[name="ucapan"]').value
+                };
+
+                fetch(scriptURL, { method: 'POST', body: JSON.stringify(formData) })
+                .then(response => {
+                    alert('Terima kasih!');
+                    form.reset();
+                    muatUcapan(); // Memanggil fungsi muat ucapan di bawah
+                    form.style.display = 'none';
+                    if (rsvpMessage) rsvpMessage.style.display = 'block';
+                    btnKirim.disabled = false;
+                    btnKirim.innerText = "Kirim Kehadiran";
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    btnKirim.disabled = false;
+                    btnKirim.innerText = "Kirim Kehadiran";
                 });
-            })
-            .catch(error => {
-                document.getElementById('ucapanList').innerHTML = '<p class="text-center text-danger">Gagal memuat data.</p>';
             });
-    }
+        }
+    </script>
 
+    <script>
+        const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbyrjh6DEWBtY_avMe1kgFvH3guflvhE8AXQmzHm03iXQF4rrJ2y2xnwd0KvKKQsFmm9/exec';
+
+        function muatUcapan() {
+            fetch(spreadsheetURL)
+                .then(response => response.json())
+                .then(data => {
+                    const listUcapan = document.getElementById('ucapanList');
+                    if (listUcapan) {
+                        listUcapan.innerHTML = '';
+                        data.forEach(item => {
+                            const itemHtml = `
+                                <div class="mb-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                    <div class="d-flex justify-content-between">
+                                        <strong class="text-danger">${item.nama}</strong>
+                                        <span class="badge badge-secondary">${item.kehadiran}</span>
+                                    </div>
+                                    <p class="text-light mt-2 mb-0">"${item.ucapan}"</p>
+                                </div>`;
+                            listUcapan.insertAdjacentHTML('beforeend', itemHtml);
+                        });
+                    }
+                });
+        }
+        document.addEventListener('DOMContentLoaded', muatUcapan);
+    </script>
+
+</body>
+</html>
     // Jalankan fungsi saat halaman dibuka
     document.addEventListener('DOMContentLoaded', muatUcapan);
 </script>
