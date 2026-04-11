@@ -16,18 +16,26 @@ var initCoreInvitation = function initCoreInvitation() {
   var lang = document.documentElement.lang;
 
   // full screen
-  var openFullScreen = function openFullScreen() {
+  // Full screen yang lebih aman
+var openFullScreen = function openFullScreen() {
+  try {
+    // Cek apakah browser mendukung fullscreen
     if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
+      document.documentElement.requestFullscreen().catch(err => {
+        console.log("Fullscreen diblokir: " + err.message);
+      });
     } else if (document.documentElement.webkitRequestFullscreen) {
-      /* Safari */
+      /* Safari / iOS */
       document.documentElement.webkitRequestFullscreen();
     } else if (document.documentElement.msRequestFullscreen) {
       /* IE11 */
       document.documentElement.msRequestFullscreen();
     }
-  };
-
+  } catch (e) {
+    // Jika eror, biarkan saja agar script tidak mati
+    console.log("Perangkat tidak mendukung Fullscreen otomatis");
+  }
+};
   // watermark
   document.addEventListener('DOMContentLoaded', function () {
     var elements = {
