@@ -459,36 +459,40 @@
                 </div>
             </div>
             <!-- end lightbox -->
-             <!-- startRSVPModal -->
-        <div class="modal fade" id="rsvpModal" tabindex="-1" role="dialog" aria-labelledby="rsvpModal" >
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content p-4" style="height:100%">
-                    <!-- rsvp form -->
-                 <section id="rsvp-section" class="container-mobile">
-                     <h3 style="color: var(--inv-base); text-align: center;">Konfirmasi Kehadiran</h3>
-             <form id="my-rsvp-form">
-                 <div class="form-group mb-3">
-            <input type="text" name="nama" class="form-control" placeholder="Nama Anda" required>
-        </div>
-        <div class="form-group mb-3">
-            <select name="kehadiran" class="form-control" required>
-                <option value="">Konfirmasi Kehadiran</option>
-                <option value="Hadir">Hadir</option>
-                <option value="Tidak Hadir">Tidak Hadir</option>
-            </select>
-        </div>
-        <div class="form-group mb-3">
-            <input type="number" name="jumlah" class="form-control" placeholder="Jumlah Orang" min="1" required>
-        </div>
-        <div class="form-group mb-3">
-            <textarea name="pesan" class="form-control" placeholder="Ucapan & Doa"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block rounded-pill" id="btnKirimRSVP">Kirim Konfirmasi</button>
-    </form>
-    <div id="rsvp-message" style="display:none; color: #00ff00; text-align: center; margin-top: 10px;">
-        Terima kasih, data Anda sudah kami terima!
-    </div>
-</section>
+            
+                <div class="modal fade" id="rsvpModal" tabindex="-1" role="dialog" aria-labelledby="rsvpModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content p-4" style="height:100%">
+                        <section id="rsvp-section" class="container-mobile">
+                            <h3 style="color: var(--inv-base); text-align: center;">Konfirmasi Kehadiran</h3>
+                            
+                            <form id="rsvpForm" class="rsvp-form"> 
+                                <div class="form-group mb-3">
+                                    <input type="text" name="nama" class="form-control" placeholder="Nama Anda" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <select name="kehadiran" class="form-control" required>
+                                        <option value="">Konfirmasi Kehadiran</option>
+                                        <option value="Hadir">Hadir</option>
+                                        <option value="Tidak Hadir">Tidak Hadir</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input type="number" name="jumlah" class="form-control" placeholder="Jumlah Orang" min="1" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <textarea name="ucapan" class="form-control" placeholder="Ucapan & Doa"></textarea> 
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block rounded-pill" id="btnKirim">Kirim Konfirmasi</button>
+                            </form>
+            
+                            <div id="rsvp-message" style="display:none; color: #00ff00; text-align: center; margin-top: 10px;">
+                                Terima kasih, data Anda sudah kami terima!
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
                     <!-- rsvp form -->
                     <button onclick="closeModal(rsvpModal)" type="button" class="btn btn-close"><svg
                             xmlns="http://www.w3.org/2000/svg" height="42px" width="42px" fill="none"
@@ -550,75 +554,91 @@
         });
     </script>
 
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyrjh6DEWBtY_avMe1kgFvH3guflvhE8AXQmzHm03iXQF4rrJ2y2xnwd0KvKKQsFmm9/exec';
-        const form = document.querySelector('#rsvpForm');
-        const btnKirim = document.querySelector('#btnKirim');
-        const list = document.getElementById('ucapanList');
-        const rsvpMessage = document.getElementById('rsvp-message');
+  <script>
+    // 1. PENGATUR URL & SELECTOR
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbykQIOXpblrVMmjzu533xSGLXahQbpDfS8kvP5ykHRaK1-xKnQlv_q8T-t_R8iQ9kY/exec';
+    const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbzpQR0gghrq0HPJfCFYp1aZuTT973ExHMCHYRs7nRQ7cop7bbTlIoatN_HH2dbzWIqd/exec';
+    
+    const form = document.querySelector('#rsvpForm');
+    const btnKirim = document.querySelector('#btnKirim');
+    const list = document.getElementById('ucapanList');
+    const rsvpMessage = document.getElementById('rsvp-message');
 
-        if (form) {
-            form.addEventListener('submit', e => {
-                e.preventDefault();
-                btnKirim.disabled = true;
-                btnKirim.innerText = "Mengirim...";
-
-                const formData = {
-                    nama: form.querySelector('input[name="nama"]').value,
-                    kehadiran: form.querySelector('select[name="kehadiran"]').value,
-                    jumlah_tamu: form.querySelector('input[name="jumlah"]').value,
-                    ucapan: form.querySelector('textarea[name="ucapan"]').value
-                };
-
-                fetch(scriptURL, { method: 'POST', body: JSON.stringify(formData) })
-                .then(response => {
-                    alert('Terima kasih!');
-                    form.reset();
-                    muatUcapan(); // Memanggil fungsi muat ucapan di bawah
-                    form.style.display = 'none';
-                    if (rsvpMessage) rsvpMessage.style.display = 'block';
-                    btnKirim.disabled = false;
-                    btnKirim.innerText = "Kirim Kehadiran";
-                })
-                .catch(error => {
-                    console.error('Error!', error.message);
-                    btnKirim.disabled = false;
-                    btnKirim.innerText = "Kirim Kehadiran";
-                });
-            });
-        }
-    </script>
-
-    <script>
-        const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbyrjh6DEWBtY_avMe1kgFvH3guflvhE8AXQmzHm03iXQF4rrJ2y2xnwd0KvKKQsFmm9/exec';
-
-        function muatUcapan() {
-            fetch(spreadsheetURL)
-                .then(response => response.json())
-                .then(data => {
-                    const listUcapan = document.getElementById('ucapanList');
-                    if (listUcapan) {
-                        listUcapan.innerHTML = '';
-                        data.forEach(item => {
-                            const itemHtml = `
-                                <div class="mb-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 10px;">
-                                    <div class="d-flex justify-content-between">
-                                        <strong class="text-danger">${item.nama}</strong>
-                                        <span class="badge badge-secondary">${item.kehadiran}</span>
-                                    </div>
-                                    <p class="text-light mt-2 mb-0">"${item.ucapan}"</p>
-                                </div>`;
-                            listUcapan.insertAdjacentHTML('beforeend', itemHtml);
-                        });
+    // 2. FUNGSI MUAT UCAPAN (DO GET)
+    function muatUcapan() {
+        fetch(spreadsheetURL)
+            .then(response => response.json())
+            .then(data => {
+                if (list) {
+                    list.innerHTML = '';
+                    if (data.length === 0) {
+                        list.innerHTML = '<p class="text-center text-muted">Belum ada ucapan.</p>';
+                        return;
                     }
-                });
+                    data.forEach(item => {
+                        const itemHtml = `
+                            <div class="mb-3 p-3 animate__animated animate__fadeIn" style="background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                <div class="d-flex justify-content-between">
+                                    <strong class="text-danger" style="font-size: 14px;">${item.nama}</strong>
+                                    <span class="badge badge-secondary" style="font-size: 10px;">${item.kehadiran}</span>
+                                </div>
+                                <p class="text-light mt-2 mb-0" style="font-size: 13px;">"${item.ucapan}"</p>
+                            </div>`;
+                        list.insertAdjacentHTML('beforeend', itemHtml);
+                    });
+                }
+            })
+            .catch(err => console.error("Gagal muat ucapan:", err));
+    }
+
+    // 3. LOGIKA KIRIM FORM (DO POST)
+    if (form) {
+        form.addEventListener('submit', e => {
+            e.preventDefault(); // Mencegah Refresh
+            
+            btnKirim.disabled = true;
+            btnKirim.innerText = "Mengirim...";
+
+            const formData = {
+                nama: form.querySelector('[name="nama"]').value,
+                kehadiran: form.querySelector('[name="kehadiran"]').value,
+                jumlah_tamu: form.querySelector('[name="jumlah"]').value,
+                ucapan: form.querySelector('[name="ucapan"]').value
+            };
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                alert('Terima kasih!');
+                form.reset();
+                muatUcapan(); // Refresh list ucapan
+                form.style.display = 'none';
+                if (rsvpMessage) rsvpMessage.style.display = 'block';
+                btnKirim.disabled = false;
+                btnKirim.innerText = "Kirim Kehadiran";
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert('Gagal mengirim. Coba lagi.');
+                btnKirim.disabled = false;
+                btnKirim.innerText = "Kirim Kehadiran";
+            });
+        });
+    }
+
+    // 4. SAKLAR MATIKAN LOADER (PASTI JALAN)
+    window.addEventListener('load', function() {
+        var loader = document.getElementById('loader');
+        if (loader) {
+            loader.style.display = 'none';
         }
-        document.addEventListener('DOMContentLoaded', muatUcapan);
-    </script>
+        muatUcapan();
+    });
+</script>
 
 </body>
 </html>
 </script>
-        <script></script>
-    </body>
-</html>
+     
