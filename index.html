@@ -97,6 +97,10 @@
                                             </div>
                                         </div>
                                         <div class="w-100">
+                                            <div class="text-center">
+                                                <div id="guestNameSlot" class="editable color-accent h5 mb-5 font-weight-bold animate__animated animate__fadeInUp animate__slower" style="font-size:18px;">Guest</div>
+                                                <button class="btn-open-invitation btn btn-primary rounded-0 animate__animated animate__fadeInUp animate__slow" style="font-size:14.4px;background-color:transparent;border-color:var(--inv-border);color:var(--inv-border);">OPEN INVITATION</button>
+                                            </div>
                                 </div>
                             </div>
                         </li>
@@ -635,31 +639,31 @@
         document.addEventListener('DOMContentLoaded', muatUcapan);
     </script>
     <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // 1. Ambil parameter 'to' dari link URL
-                const urlParams = new URLSearchParams(window.location.search);
-                let namaTamu = urlParams.get('to');
-                
-                // 2. Targetkan elemen tempat nama muncul
-                const displayElement = document.getElementById('guest-name');
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Ambil parameter 'to' dari link URL
+        const urlParams = new URLSearchParams(window.location.search);
+        let namaTamu = urlParams.get('to');
         
-                if (namaTamu && displayElement) {
-                    // Bersihkan tanda + menjadi spasi
-                    namaTamu = namaTamu.replace(/[+]/g, ' ');
-                    
-                    // .innerText akan MENIMPA isi lama, bukan menambah
-                    displayElement.innerText = namaTamu;
-        
-                    // Opsi: Jika ingin mengisi otomatis form RSVP juga
-                    const inputNamaRSVP = document.querySelector('input[name="nama"]');
-                    if (inputNamaRSVP) {
-                        inputNamaRSVP.value = namaTamu;
-                    }
-                } else if (displayElement) {
-                    // Jika tidak ada nama di link, tampilkan teks default agar tidak kosong melompong
-                    displayElement.innerText = "Tamu Undangan";
-                }
-            });
+        // 2. Targetkan elemen tempat nama muncul
+        const displayElement = document.getElementById('guest-name');
+
+        if (namaTamu && displayElement) {
+            // Bersihkan tanda + menjadi spasi
+            namaTamu = namaTamu.replace(/[+]/g, ' ');
+            
+            // .innerText akan MENIMPA isi lama, bukan menambah
+            displayElement.innerText = namaTamu;
+
+            // Opsi: Jika ingin mengisi otomatis form RSVP juga
+            const inputNamaRSVP = document.querySelector('input[name="nama"]');
+            if (inputNamaRSVP) {
+                inputNamaRSVP.value = namaTamu;
+            }
+        } else if (displayElement) {
+            // Jika tidak ada nama di link, tampilkan teks default agar tidak kosong melompong
+            displayElement.innerText = "Tamu Undangan";
+        }
+    });
 </script>
 </body>
 </html>
