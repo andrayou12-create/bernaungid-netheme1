@@ -564,6 +564,14 @@
             }
             checkBrowser()
         </script>
+         <script>
+    window.addEventListener('load', function() {
+        var loader = document.getElementById('loader');
+        if (loader) {
+            loader.style.display = 'none';
+        }
+    });
+</script>
         <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwBEAPQfP0_Cp7kfjxZVvWnd0ozxomlhvNueq0_qLMdHgJ-c_oci6vzqc6Fx90CO45t/exec';
     const form = document.querySelector('#rsvpForm');
@@ -668,15 +676,12 @@
 
     // Jalankan fungsi saat halaman dibuka
     document.addEventListener('DOMContentLoaded', muatUcapan);
-</script
-    <script>
-    window.addEventListener('load', function() {
-        var loader = document.getElementById('loader');
-        if (loader) {
-            loader.style.display = 'none';
-        }
-    });
 </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    // Masukkan kode form.addEventListener di sini
+});
+    </script>
         <script></script>
     </body>
 </html>
