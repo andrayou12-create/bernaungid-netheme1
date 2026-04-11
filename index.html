@@ -459,18 +459,19 @@
                 </div>
             </div>
             <!-- end lightbox -->
-            
-              <div class="modal fade" id="rsvpModal" tabindex="-1" role="dialog" aria-labelledby="rsvpModal">
+                            
+                             <div class="modal fade" id="rsvpModal" tabindex="-1" role="dialog" aria-labelledby="rsvpModal">
                     <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content p-4" style="position: relative;"> <button onclick="closeModal(rsvpModal)" type="button" class="btn-close" style="position: absolute; top: 15px; right: 15px; border: none; background: none; z-index: 999;">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="30px" width="30px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="modal-content p-4" style="position: relative; border-radius: 15px;">
+                            
+                            <button onclick="closeModal(rsvpModal)" type="button" class="btn-close-custom" style="position: absolute; top: 10px; right: 10px; background: none; border: none; z-index: 9999; cursor: pointer;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="32px" width="32px" fill="none" viewBox="0 0 24 24" stroke="#333">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                 
-                            <section id="rsvp-section" class="container-mobile">
-                                <h3 style="color: var(--inv-base); text-align: center;">Konfirmasi Kehadiran</h3>
-                                
+                            <section id="rsvp-section">
+                                <h3 style="text-align: center;">Konfirmasi Kehadiran</h3>
                                 <form id="rsvpForm" class="rsvp-form"> 
                                     <div class="form-group mb-3">
                                         <input type="text" name="nama" class="form-control" placeholder="Nama Anda" required>
@@ -561,7 +562,7 @@
 
   <script>
     // 1. PENGATUR URL & SELECTOR
-      <script>
+<script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbykQIOXpblrVMmjzu533xSGLXahQbpDfS8kvP5ykHRaK1-xKnQlv_q8T-t_R8iQ9kY/exec';
         const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbzpQR0gghrq0HPJfCFYp1aZuTT973ExHMCHYRs7nRQ7cop7bbTlIoatN_HH2dbzWIqd/exec';
         
@@ -576,53 +577,60 @@
                 .then(data => {
                     if (list) {
                         list.innerHTML = '';
-                        data.reverse().forEach(item => { // Pakai reverse agar yang terbaru di atas
+                        // Balik data agar yang terbaru muncul di atas
+                        data.reverse().forEach(item => {
                             const itemHtml = `
                                 <div class="mb-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 10px;">
                                     <div class="d-flex justify-content-between">
-                                        <strong class="text-danger">${item.nama}</strong>
+                                        <strong class="text-danger" style="font-size: 14px;">${item.nama}</strong>
                                         <span class="badge badge-secondary" style="font-size: 10px;">${item.kehadiran}</span>
                                     </div>
-                                    <p class="text-light mt-2 mb-0" style="font-size: 13px;">"${item.ucapan || item.pesan}"</p>
+                                    <p class="text-light mt-2 mb-0" style="font-size: 13px;">"${item.ucapan || item.pesan || ''}"</p>
                                 </div>`;
                             list.insertAdjacentHTML('beforeend', itemHtml);
                         });
                     }
-                }).catch(err => console.log("Gagal muat ucapan"));
+                }).catch(err => console.log("Gagal memuat ucapan"));
         }
 
         if (form) {
             form.addEventListener('submit', e => {
-                e.preventDefault();
+                e.preventDefault(); // Mencegah refresh halaman
+                
                 btnKirim.disabled = true;
                 btnKirim.innerText = "Mengirim...";
 
-                // Mengambil value dengan proteksi jika salah satu null
                 const formData = {
                     nama: form.querySelector('[name="nama"]').value,
                     kehadiran: form.querySelector('[name="kehadiran"]').value,
                     jumlah_tamu: form.querySelector('[name="jumlah"]').value,
-                    ucapan: form.querySelector('[name="ucapan"]').value
+                    ucapan: form.querySelector('[name="ucapan"]').value // Pastikan ini 'ucapan'
                 };
 
                 fetch(scriptURL, { method: 'POST', body: JSON.stringify(formData) })
                 .then(response => {
-                    alert('Konfirmasi Berhasil!');
                     form.reset();
-                    muatUcapan();
+                    muatUcapan(); // Update daftar ucapan
+                    
+                    // Sembunyikan form dan tampilkan pesan sukses
                     form.style.display = 'none';
                     if (rsvpMessage) rsvpMessage.style.display = 'block';
-                    btnKirim.disabled = false;
-                    btnKirim.innerText = "Kirim Kehadiran";
+
+                    // Opsional: Tutup modal otomatis setelah 3 detik
+                    setTimeout(() => {
+                        if (typeof closeModal === 'function') closeModal(document.getElementById('rsvpModal'));
+                    }, 3000);
                 })
                 .catch(error => {
-                    alert('Gagal mengirim data!');
+                    console.error('Error!', error.message);
+                    alert('Gagal mengirim data. Silakan coba lagi.');
                     btnKirim.disabled = false;
-                    btnKirim.innerText = "Coba Lagi";
+                    btnKirim.innerText = "Kirim Konfirmasi";
                 });
             });
         }
 
+        // Jalankan saat awal
         window.addEventListener('load', function() {
             var loader = document.getElementById('loader');
             if (loader) loader.style.display = 'none';
