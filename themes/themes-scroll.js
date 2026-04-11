@@ -619,10 +619,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // rsvp
-var btnRsvp = document.getElementsByClassName('btn-rsvp');
+var btnRsvp = document.getElementsByClassName('#btnKirim');
 var rsvpPlaceholder = (_document$querySelect = document.querySelector('.rsvp-placeholder')) !== null && _document$querySelect !== void 0 ? _document$querySelect : null;
 var checkRSVPForm = setInterval(function () {
-  var rsvpForm = document.querySelector('.rsvp-form');
+  var rsvpForm = document.querySelector('#rsvpForm');
   if (rsvpForm && rsvpPlaceholder) {
     rsvpPlaceholder.innerHTML = "";
     rsvpPlaceholder.appendChild(rsvpForm);
