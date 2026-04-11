@@ -619,25 +619,39 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // rsvp
-var btnRsvp = document.getElementsByClassName('#btnKirim');
-var rsvpPlaceholder = (_document$querySelect = document.querySelector('.rsvp-placeholder')) !== null && _document$querySelect !== void 0 ? _document$querySelect : null;
-var checkRSVPForm = setInterval(function () {
-  var rsvpForm = document.querySelector('#rsvpForm');
-  if (rsvpForm && rsvpPlaceholder) {
-    rsvpPlaceholder.innerHTML = "";
-    rsvpPlaceholder.appendChild(rsvpForm);
-    clearInterval(checkRSVPForm); // Hentikan pengecekan setelah elemen ditemukan
-  }
+const rsvpPlaceholder = document.querySelector('.rsvp-placeholder');
+
+// Gunakan querySelectorAll untuk mengambil semua tombol RSVP (jika ada lebih dari satu)
+const btnRsvp = document.querySelectorAll('#btnKirimRSVP'); 
+
+const checkRSVPForm = setInterval(function () {
+    // Pastikan ID ini SAMA dengan yang ada di tag <form id="..."> Anda
+    const rsvpForm = document.querySelector('#my-rsvp-form');
+    
+    if (rsvpForm && rsvpPlaceholder) {
+        rsvpPlaceholder.innerHTML = "";
+        rsvpPlaceholder.appendChild(rsvpForm);
+        
+        // Setelah form dipindah, pastikan dia tampil (jika sebelumnya disembunyikan)
+        rsvpForm.style.display = "block"; 
+        
+        clearInterval(checkRSVPForm); 
+    }
 }, 500);
-for (var i = 0; i < btnRsvp.length; i++) {
-  if (rsvpPlaceholder) {
-    btnRsvp[i].style.display = "none";
-  } else {
-    btnRsvp[i].onclick = function () {
-      showModal(rsvpModal);
-    };
-  }
-}
+
+// Atur fungsi klik pada tombol RSVP
+btnRsvp.forEach(btn => {
+    if (rsvpPlaceholder) {
+        // Jika pakai placeholder/tampil langsung, tombol buka modal mungkin tidak butuh tampil
+        btn.style.display = "none";
+    } else {
+        btn.onclick = function () {
+            if (typeof rsvpModal !== 'undefined') {
+                showModal(rsvpModal);
+            }
+        };
+    }
+});
 
 // Triger aninmasi saat di scroll
 // Pilih semua elemen dengan class animate__animated
