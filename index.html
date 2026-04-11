@@ -561,7 +561,6 @@
 
   <script>
     // 1. PENGATUR URL & SELECTOR
-<script>
         window.addEventListener('load', function() {
             var loader = document.getElementById('loader');
             if (loader) {
@@ -612,7 +611,7 @@
             });
         }
 
-    <script>
+    
         const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbzpQR0gghrq0HPJfCFYp1aZuTT973ExHMCHYRs7nRQ7cop7bbTlIoatN_HH2dbzWIqd/exec';
 
         function muatUcapan() {
@@ -638,30 +637,20 @@
         }
         document.addEventListener('DOMContentLoaded', muatUcapan);
     </script>
-    <script>
+
+   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 1. Ambil parameter 'to' dari link URL
         const urlParams = new URLSearchParams(window.location.search);
         let namaTamu = urlParams.get('to');
         
-        // 2. Targetkan elemen tempat nama muncul
-        const displayElement = document.getElementById('guest-name');
+        // PASTIKAN ID DI SINI SAMA DENGAN DI HTML (guestNameSlot)
+        const displayElement = document.getElementById('guestNameSlot');
 
         if (namaTamu && displayElement) {
-            // Bersihkan tanda + menjadi spasi
             namaTamu = namaTamu.replace(/[+]/g, ' ');
             
-            // .innerText akan MENIMPA isi lama, bukan menambah
+            // Gunakan .innerText untuk MENGGANTI tulisan "Guest" secara total
             displayElement.innerText = namaTamu;
-
-            // Opsi: Jika ingin mengisi otomatis form RSVP juga
-            const inputNamaRSVP = document.querySelector('input[name="nama"]');
-            if (inputNamaRSVP) {
-                inputNamaRSVP.value = namaTamu;
-            }
-        } else if (displayElement) {
-            // Jika tidak ada nama di link, tampilkan teks default agar tidak kosong melompong
-            displayElement.innerText = "Tamu Undangan";
         }
     });
 </script>
