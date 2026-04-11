@@ -563,80 +563,79 @@
   <script>
     // 1. PENGATUR URL & SELECTOR
 <script>
+        window.addEventListener('load', function() {
+            var loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+
+    <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbykQIOXpblrVMmjzu533xSGLXahQbpDfS8kvP5ykHRaK1-xKnQlv_q8T-t_R8iQ9kY/exec';
-        const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbzpQR0gghrq0HPJfCFYp1aZuTT973ExHMCHYRs7nRQ7cop7bbTlIoatN_HH2dbzWIqd/exec';
-        
         const form = document.querySelector('#rsvpForm');
         const btnKirim = document.querySelector('#btnKirim');
         const list = document.getElementById('ucapanList');
         const rsvpMessage = document.getElementById('rsvp-message');
 
-        function muatUcapan() {
-            fetch(spreadsheetURL)
-                .then(response => response.json())
-                .then(data => {
-                    if (list) {
-                        list.innerHTML = '';
-                        // Balik data agar yang terbaru muncul di atas
-                        data.reverse().forEach(item => {
-                            const itemHtml = `
-                                <div class="mb-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 10px;">
-                                    <div class="d-flex justify-content-between">
-                                        <strong class="text-danger" style="font-size: 14px;">${item.nama}</strong>
-                                        <span class="badge badge-secondary" style="font-size: 10px;">${item.kehadiran}</span>
-                                    </div>
-                                    <p class="text-light mt-2 mb-0" style="font-size: 13px;">"${item.ucapan || item.pesan || ''}"</p>
-                                </div>`;
-                            list.insertAdjacentHTML('beforeend', itemHtml);
-                        });
-                    }
-                }).catch(err => console.log("Gagal memuat ucapan"));
-        }
-
         if (form) {
             form.addEventListener('submit', e => {
-                e.preventDefault(); // Mencegah refresh halaman
-                
+                e.preventDefault();
                 btnKirim.disabled = true;
                 btnKirim.innerText = "Mengirim...";
 
                 const formData = {
-                    nama: form.querySelector('[name="nama"]').value,
-                    kehadiran: form.querySelector('[name="kehadiran"]').value,
-                    jumlah_tamu: form.querySelector('[name="jumlah"]').value,
-                    ucapan: form.querySelector('[name="ucapan"]').value // Pastikan ini 'ucapan'
+                    nama: form.querySelector('input[name="nama"]').value,
+                    kehadiran: form.querySelector('select[name="kehadiran"]').value,
+                    jumlah_tamu: form.querySelector('input[name="jumlah"]').value,
+                    ucapan: form.querySelector('textarea[name="ucapan"]').value
                 };
 
                 fetch(scriptURL, { method: 'POST', body: JSON.stringify(formData) })
                 .then(response => {
+                    alert('Terima kasih!');
                     form.reset();
-                    muatUcapan(); // Update daftar ucapan
-                    
-                    // Sembunyikan form dan tampilkan pesan sukses
+                    muatUcapan(); // Memanggil fungsi muat ucapan di bawah
                     form.style.display = 'none';
                     if (rsvpMessage) rsvpMessage.style.display = 'block';
-
-                    // Opsional: Tutup modal otomatis setelah 3 detik
-                    setTimeout(() => {
-                        if (typeof closeModal === 'function') closeModal(document.getElementById('rsvpModal'));
-                    }, 3000);
+                    btnKirim.disabled = false;
+                    btnKirim.innerText = "Kirim Kehadiran";
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
-                    alert('Gagal mengirim data. Silakan coba lagi.');
                     btnKirim.disabled = false;
-                    btnKirim.innerText = "Kirim Konfirmasi";
+                    btnKirim.innerText = "Kirim Kehadiran";
                 });
             });
         }
-
-        // Jalankan saat awal
-        window.addEventListener('load', function() {
-            var loader = document.getElementById('loader');
-            if (loader) loader.style.display = 'none';
-            muatUcapan();
-        });
     </script>
+
+    <script>
+        const spreadsheetURL = 'https://script.google.com/macros/s/AKfycbzpQR0gghrq0HPJfCFYp1aZuTT973ExHMCHYRs7nRQ7cop7bbTlIoatN_HH2dbzWIqd/exec';
+
+        function muatUcapan() {
+            fetch(spreadsheetURL)
+                .then(response => response.json())
+                .then(data => {
+                    const listUcapan = document.getElementById('ucapanList');
+                    if (listUcapan) {
+                        listUcapan.innerHTML = '';
+                        data.forEach(item => {
+                            const itemHtml = `
+                                <div class="mb-3 p-3" style="background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                    <div class="d-flex justify-content-between">
+                                        <strong class="text-danger">${item.nama}</strong>
+                                        <span class="badge badge-secondary">${item.kehadiran}</span>
+                                    </div>
+                                    <p class="text-light mt-2 mb-0">"${item.ucapan}"</p>
+                                </div>`;
+                            listUcapan.insertAdjacentHTML('beforeend', itemHtml);
+                        });
+                    }
+                });
+        }
+        document.addEventListener('DOMContentLoaded', muatUcapan);
+    </script>
+
 </body>
 </html>
-     
