@@ -752,15 +752,37 @@ var openInvitation = function openInvitation(event) {
 
 // 3. TRANSISI BUKA UNDANGAN
 function openInvitation(event) {
-    document.body.style.overflowY = '';
+    // 1. Paksa overflow menjadi auto agar bisa di-scroll
+    document.body.style.overflow = 'auto';
+    document.body.style.overflowX = 'hidden';
+
+    // 2. Hilangkan atau pindahkan cover
     var cover = document.querySelector(".cover");
-    if (cover) cover.style.position = 'relative';
+    if (cover) {
+        cover.style.display = 'none'; // Cara paling aman agar tidak menghalangi
+    }
+
+    // 3. Pastikan konten utama muncul
+    var mainContent = document.querySelector("main") || document.querySelector("#main-content");
+    if (mainContent) {
+        mainContent.style.opacity = '1';
+        mainContent.style.display = 'block';
+    }
+
+    // 4. Scroll otomatis ke bawah
+    window.scrollTo({
+        top: window.innerHeight,
+        behavior: 'smooth'
+    });
+}
 
     var notOpen = document.querySelector(".not-open");
-    if (notOpen) {
-        notOpen.classList.add("opened");
-        notOpen.classList.remove("not-open");
-    }
+if (notOpen) {
+    notOpen.classList.remove("not-open");
+    // Tambahkan baris ini untuk memastikan konten terlihat
+    notOpen.style.display = "block"; 
+    notOpen.style.opacity = "1";
+}
 
     if (event && event.target) {
         event.target.remove();
@@ -768,14 +790,10 @@ function openInvitation(event) {
 
     setTimeout(function () {
         var canvas = document.querySelector(".blank-canvas");
-        if (canvas) canvas.style.display = "none";
-        window.scroll({
-            top: window.innerHeight,
-            behavior: 'smooth'
-        });
-    }, 1000);
+if (canvas) {
+    canvas.style.opacity = "0";
+    setTimeout(() => { canvas.style.display = "none"; }, 500);
 }
-
 // Pasang event listener dengan aman
 document.addEventListener("DOMContentLoaded", function() {
     var btnOpenInvitation = document.getElementsByClassName("btn-open-invitation");
