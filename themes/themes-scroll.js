@@ -736,35 +736,36 @@ var openInvitation = function openInvitation(event) {
     }
   }
 
-  // 3. TRANSISI BUKA UNDANGAN
-  document.body.style.overflowY = '';
-  document.querySelector(".cover").style.position = 'relative';
-  
-  var notOpen = document.querySelector(".not-open");
-  if (notOpen) {
-    notOpen.classList.add("opened");
-    notOpen.classList.remove("not-open");
-  }
-
-  if (event && event.target) {
-    event.target.remove();
-  }
-
-  setTimeout(function () {
+// 3. TRANSISI BUKA UNDANGAN
+function openInvitation(event) {
+    document.body.style.overflowY = '';
+    var cover = document.querySelector(".cover");
     if (cover) cover.style.position = 'relative';
-    var canvas = document.querySelector(".blank-canvas");
-    if (canvas) canvas.style.display = "none";
-    window.scroll({
-      top: window.innerHeight,
-      behavior: 'smooth'
-    });
-  }, 1000);
-};
-// buka undangan
-var btnOpenInvitation = document.getElementsByClassName("btn-open-invitation");
-for (var _i2 = 0; _i2 < btnOpenInvitation.length; _i2++) {
-  btnOpenInvitation[_i2].addEventListener("click", openInvitation, false);
+
+    var notOpen = document.querySelector(".not-open");
+    if (notOpen) {
+        notOpen.classList.add("opened");
+        notOpen.classList.remove("not-open");
+    }
+
+    if (event && event.target) {
+        event.target.remove();
+    }
+
+    setTimeout(function () {
+        var canvas = document.querySelector(".blank-canvas");
+        if (canvas) canvas.style.display = "none";
+        window.scroll({
+            top: window.innerHeight,
+            behavior: 'smooth'
+        });
+    }, 1000);
 }
-}();
-/******/ })()
-;
+
+// Pasang event listener dengan aman
+document.addEventListener("DOMContentLoaded", function() {
+    var btnOpenInvitation = document.getElementsByClassName("btn-open-invitation");
+    for (var i = 0; i < btnOpenInvitation.length; i++) {
+        btnOpenInvitation[i].addEventListener("click", openInvitation, false);
+    }
+});
