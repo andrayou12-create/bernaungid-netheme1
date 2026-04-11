@@ -16,26 +16,18 @@ var initCoreInvitation = function initCoreInvitation() {
   var lang = document.documentElement.lang;
 
   // full screen
-  // Full screen yang lebih aman
-var openFullScreen = function openFullScreen() {
-  try {
-    // Cek apakah browser mendukung fullscreen
+  var openFullScreen = function openFullScreen() {
     if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().catch(err => {
-        console.log("Fullscreen diblokir: " + err.message);
-      });
+      document.documentElement.requestFullscreen();
     } else if (document.documentElement.webkitRequestFullscreen) {
-      /* Safari / iOS */
+      /* Safari */
       document.documentElement.webkitRequestFullscreen();
     } else if (document.documentElement.msRequestFullscreen) {
       /* IE11 */
       document.documentElement.msRequestFullscreen();
     }
-  } catch (e) {
-    // Jika eror, biarkan saja agar script tidak mati
-    console.log("Perangkat tidak mendukung Fullscreen otomatis");
-  }
-};
+  };
+
   // watermark
   document.addEventListener('DOMContentLoaded', function () {
     var elements = {
@@ -53,7 +45,7 @@ var openFullScreen = function openFullScreen() {
       if (elements.illegal) elements.illegal.style.display = "none";
     } else if (elements.wmLayout && !elements.wmp) {
       if (elements.app) elements.app.innerHTML = "";
-      if (elements.illegal) elements.illegal.style.display = "flex";
+      if (elements.illegal) elements.illegal.style.display = "none";
     } else {
       if (elements.wm) elements.wm.style.display = "none";
       if (elements.illegal) elements.illegal.style.display = "none";
@@ -619,39 +611,25 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // rsvp
-const rsvpPlaceholder = document.querySelector('.rsvp-placeholder');
-
-// Gunakan querySelectorAll untuk mengambil semua tombol RSVP (jika ada lebih dari satu)
-const btnRsvp = document.querySelectorAll('#btnKirimRSVP'); 
-
-const checkRSVPForm = setInterval(function () {
-    // Pastikan ID ini SAMA dengan yang ada di tag <form id="..."> Anda
-    const rsvpForm = document.querySelector('#my-rsvp-form');
-    
-    if (rsvpForm && rsvpPlaceholder) {
-        rsvpPlaceholder.innerHTML = "";
-        rsvpPlaceholder.appendChild(rsvpForm);
-        
-        // Setelah form dipindah, pastikan dia tampil (jika sebelumnya disembunyikan)
-        rsvpForm.style.display = "block"; 
-        
-        clearInterval(checkRSVPForm); 
-    }
+var btnRsvp = document.getElementsByClassName('btn-rsvp');
+var rsvpPlaceholder = (_document$querySelect = document.querySelector('.rsvp-placeholder')) !== null && _document$querySelect !== void 0 ? _document$querySelect : null;
+var checkRSVPForm = setInterval(function () {
+  var rsvpForm = document.querySelector('.rsvp-form');
+  if (rsvpForm && rsvpPlaceholder) {
+    rsvpPlaceholder.innerHTML = "";
+    rsvpPlaceholder.appendChild(rsvpForm);
+    clearInterval(checkRSVPForm); // Hentikan pengecekan setelah elemen ditemukan
+  }
 }, 500);
-
-// Atur fungsi klik pada tombol RSVP
-btnRsvp.forEach(btn => {
-    if (rsvpPlaceholder) {
-        // Jika pakai placeholder/tampil langsung, tombol buka modal mungkin tidak butuh tampil
-        btn.style.display = "none";
-    } else {
-        btn.onclick = function () {
-            if (typeof rsvpModal !== 'undefined') {
-                showModal(rsvpModal);
-            }
-        };
-    }
-});
+for (var i = 0; i < btnRsvp.length; i++) {
+  if (rsvpPlaceholder) {
+    btnRsvp[i].style.display = "none";
+  } else {
+    btnRsvp[i].onclick = function () {
+      showModal(rsvpModal);
+    };
+  }
+}
 
 // Triger aninmasi saat di scroll
 // Pilih semua elemen dengan class animate__animated
@@ -711,93 +689,40 @@ var openInvitation = function openInvitation(event) {
     }
   }
 
-  var openInvitation = function openInvitation(event) {
-  var cover = document.querySelector(".satumomen_cover");
-  var music = document.getElementById("audio"); // Pastikan ID sesuai
-
-  // 1. PAKSA MUSIK JALAN DULUAN (Interaksi User)
-  if (music) {
-    music.muted = false;
-    music.volume = 1.0;
-    var playPromise = music.play();
-    
-    if (playPromise !== undefined) {
-      playPromise.catch(function(error) {
-        console.log("Autoplay dicegah, mencoba alternatif...");
-        // Jika gagal, kita coba play lagi tanpa fullscreen
-      });
-    }
+  // play music
+  playMusic(true);
+  function updateCoverHeight() {
+    cover.style.height = window.innerHeight > 500 ? "".concat(window.innerHeight, "px") : "500px";
   }
-
-  // 2. LOGIKA FULLSCREEN (Dibuat opsional agar tidak merusak musik)
-  var updateCoverHeight = function updateCoverHeight() {
-    cover.style.height = window.innerWidth <= 500 ? "".concat(window.innerHeight, "px") : "500px";
-  };
-  
   window.addEventListener('resize', updateCoverHeight);
   updateCoverHeight();
-
-  // Cek apakah browser mendukung fullscreen sebelum eksekusi
-  if (!/UCBrowser|MiuiBrowser|OppoBrowser|HeyTapBrowser/i.test(navigator.userAgent)) {
-    try {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      } else if (document.documentElement.webkitRequestFullscreen) {
-        document.documentElement.webkitRequestFullscreen();
-      }
-    } catch (e) {
-      console.log("Fullscreen ditolak browser HP");
-    }
+  if (navigator.userAgent.indexOf("UCBrowser") != -1 || navigator.userAgent.indexOf("MiuiBrowser") != -1 || navigator.userAgent.includes("OppoBrowser") || navigator.userAgent.includes("HeyTapBrowser")) {
+    console.log("Browser not support portrait full screen mode");
+  } else {
+    openFullScreen();
   }
 
-// 3. TRANSISI BUKA UNDANGAN
-function openInvitation(event) {
-    // 1. Paksa overflow menjadi auto agar bisa di-scroll
-    document.body.style.overflow = 'auto';
-    document.body.style.overflowX = 'hidden';
-
-    // 2. Hilangkan atau pindahkan cover
-    var cover = document.querySelector(".cover");
-    if (cover) {
-        cover.style.display = 'none'; // Cara paling aman agar tidak menghalangi
-    }
-
-    // 3. Pastikan konten utama muncul
-    var mainContent = document.querySelector("main") || document.querySelector("#main-content");
-    if (mainContent) {
-        mainContent.style.opacity = '1';
-        mainContent.style.display = 'block';
-    }
-
-    // 4. Scroll otomatis ke bawah
-    window.scrollTo({
-        top: window.innerHeight,
-        behavior: 'smooth'
+  // hide the cover
+  document.body.style.overflowY = '';
+  document.querySelector(".cover").style.position = 'relative';
+  (_document$querySelect2 = document.querySelector(".not-open")) === null || _document$querySelect2 === void 0 || _document$querySelect2.classList.add("opened");
+  (_document$querySelect3 = document.querySelector(".not-open")) === null || _document$querySelect3 === void 0 || _document$querySelect3.classList.remove("not-open");
+  event === null || event === void 0 || (_event$target = event.target) === null || _event$target === void 0 || _event$target.remove();
+  setTimeout(function () {
+    cover.style.position = 'relative';
+    document.querySelector(".blank-canvas").style.display = "none";
+    window.scroll({
+      top: window.innerHeight,
+      behavior: 'smooth'
     });
-}
+  }, 1000);
+};
 
-    var notOpen = document.querySelector(".not-open");
-if (notOpen) {
-    notOpen.classList.remove("not-open");
-    // Tambahkan baris ini untuk memastikan konten terlihat
-    notOpen.style.display = "block"; 
-    notOpen.style.opacity = "1";
+// buka undangan
+var btnOpenInvitation = document.getElementsByClassName("btn-open-invitation");
+for (var _i2 = 0; _i2 < btnOpenInvitation.length; _i2++) {
+  btnOpenInvitation[_i2].addEventListener("click", openInvitation, false);
 }
-
-    if (event && event.target) {
-        event.target.remove();
-    }
-
-    setTimeout(function () {
-        var canvas = document.querySelector(".blank-canvas");
-if (canvas) {
-    canvas.style.opacity = "0";
-    setTimeout(() => { canvas.style.display = "none"; }, 500);
-}
-// Pasang event listener dengan aman
-document.addEventListener("DOMContentLoaded", function() {
-    var btnOpenInvitation = document.getElementsByClassName("btn-open-invitation");
-    for (var i = 0; i < btnOpenInvitation.length; i++) {
-        btnOpenInvitation[i].addEventListener("click", openInvitation, false);
-    }
-}); // <--- Ini adalah penutup untuk document.addEventListener
+}();
+/******/ })()
+;

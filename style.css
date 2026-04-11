@@ -3768,16 +3768,3 @@
 .ph-fill.ph-youtube-logo:before {
   content: "\eddf";
 }
-#ucapanList::-webkit-scrollbar {
-    width: 4px;
-}
-#ucapanList::-webkit-scrollbar-thumb {
-    background: #e50914; /* Merah Netflix */
-    border-radius: 10px;
-}
-.bg-dark {
-    background-color: #141414 !important; /* Hitam Netflix */
-}
-.border-danger {
-    border-color: #e50914 !important;
-}
