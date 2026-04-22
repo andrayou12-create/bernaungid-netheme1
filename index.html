@@ -62,38 +62,36 @@
             #YTMusic {
                 display: block
             }
-            .gift-card {
-    background: #141414; /* Abu-abu gelap khas latar belakang Netflix */
-    border: 1px solid #333;
-    border-radius: 4px; /* Sudut lebih tegas khas Netflix */
+           .gift-card {
+    background: #141414;
+    border: 1px solid var(--inv-border); /* Menggunakan variabel border Anda */
+    border-radius: 4px;
     padding: 25px;
     text-align: center;
     margin-bottom: 20px;
-    transition: transform 0.3s ease;
+    font-family: var(--font-base); /* Menggunakan Lato */
 }
-.gift-card:hover {
-    transform: scale(1.05); /* Efek zoom saat hover seperti poster Netflix */
-}
+
 .copy-btn {
-    background: #E50914; /* Merah Netflix */
+    background: #E50914;
     color: white;
     border: none;
-    padding: 8px 20px;
+    padding: 10px 20px;
     border-radius: 4px;
+    font-family: var(--font-base);
     font-size: 13px;
-    font-weight: bold;
+    font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
     margin-top: 15px;
     letter-spacing: 1px;
 }
-.copy-btn:hover {
-    background: #ff0a16;
-}
-.bank-logo {
-    filter: brightness(0) invert(1); /* Membuat logo bank menjadi putih agar senada */
-    margin-bottom: 15px;
-    height: 30px;
+
+.card-title-netflix {
+    font-family: var(--font-accent); /* Menggunakan Bebas Neue */
+    color: #E50914;
+    font-size: 32px;
+    letter-spacing: 2px;
 }
         </style>
     </head>
@@ -278,25 +276,28 @@ Kami berharap kalian bisa datang dan ikut memeriahkan acara kami. <br/>
                                 </div>
                             </div>
                         </li>
-                                    <li class="container-mobile satumomen_slide" style="background-color: #000000;">
+<li class="container-mobile satumomen_slide" style="background-color: #000000;">
     <div class="workspace">
         <div class="content h-100 w-100 mx-auto">
             <div class="h-100 d-flex flex-column justify-content-center align-items-center">
                 <div class="w-100 px-4">
-                    <div class="font-weight-bold mb-2 animate__animated animate__fadeInUp" style="font-size:32px; color: #E50914; font-family: 'Bebas Neue', sans-serif;">Kado Digital</div>
-                    <p class="mb-4 animate__animated animate__fadeInUp" style="font-size: 14px; color: #ffffff; opacity: 0.9;">Tanpa mengurangi rasa hormat, bagi tamu yang ingin memberikan tanda kasih dapat melalui nomor rekening di bawah ini:</p>
+                    <div class="card-title-netflix mb-2 animate__animated animate__fadeInUp">Kado Digital</div>
+                    
+                    <p class="mb-4 animate__animated animate__fadeInUp" style="font-family: var(--font-base); font-size: 14px; color: #ffffff; opacity: 0.9;">
+                        Tanpa mengurangi rasa hormat, bagi tamu yang ingin memberikan tanda kasih dapat melalui nomor rekening di bawah ini:
+                    </p>
                     
                     <div class="gift-card animate__animated animate__zoomIn">
-                        <div style="color: #E50914; font-weight: bold; font-size: 12px; margin-bottom: 5px; text-transform: uppercase;">Bank Mandiri</div>
-                        <div class="font-weight-bold" style="font-size: 20px; color: #ffffff; letter-spacing: 2px;">1220012119916</div>
-                        <div style="font-size: 14px; color: #b3b3b3;">a.n. Aniq Nahdia Lulu A</div>
+                        <div style="color: #E50914; font-weight: 900; font-size: 12px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1.5px;">Bank Mandiri</div>
+                        <div class="font-weight-bold" style="font-size: 22px; color: #ffffff; letter-spacing: 2px;">1220012119916</div>
+                        <div style="font-size: 14px; color: #b3b3b3; font-style: italic;">a.n. Aniq Nahdia Lulu A</div>
                         <button class="copy-btn" onclick="copyText('1234567890')">Salin Rekening</button>
                     </div>
 
                     <div class="gift-card animate__animated animate__zoomIn" style="animation-delay: 200ms;">
-                        <div style="color: #E50914; font-weight: bold; font-size: 12px; margin-bottom: 5px; text-transform: uppercase;">Bank Permata</div>
-                        <div class="font-weight-bold" style="font-size: 20px; color: #ffffff; letter-spacing: 2px;">997619304</div>
-                        <div style="font-size: 14px; color: #b3b3b3;">a.n. Nur Rofif</div>
+                        <div style="color: #E50914; font-weight: 900; font-size: 12px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1.5px;">Bank Permata</div>
+                        <div class="font-weight-bold" style="font-size: 22px; color: #ffffff; letter-spacing: 2px;">997619304</div>
+                        <div style="font-size: 14px; color: #b3b3b3; font-style: italic;">a.n. Nur Rofif</div>
                         <button class="copy-btn" onclick="copyText('0987654321')">Salin Rekening</button>
                     </div>
                 </div>
