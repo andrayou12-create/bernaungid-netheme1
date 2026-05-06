@@ -14,13 +14,12 @@
         p { color: #666; font-size: 14px; margin-bottom: 20px; }
         input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline-color: #5A0000; }
         
-        .btn-wa { background: #25D366; color: white; border: none; padding: 15px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; margin-bottom: 10px; display: block; text-decoration: none; }
-        .btn-wa:hover { background: #128C7E; transform: translateY(-2px); }
+        .btn-wa { background: #25D366; color: white; border: none; padding: 15px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; margin-bottom: 10px; }
         
-        /* Gaya tombol Instagram */
-        .btn-ig { background: #E1306C; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px; transition: 0.3s; display: block; text-decoration: none; box-sizing: border-box; }
-        .btn-ig:hover { background: #C13584; transform: translateY(-2px); }
+        /* Tombol Khusus Instagram */
+        .btn-ig { background: #E1306C; color: white; border: none; padding: 15px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
         
+        .btn-wa:hover, .btn-ig:hover { transform: translateY(-2px); opacity: 0.9; }
         .footer-text { margin-top: 20px; font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
@@ -28,7 +27,7 @@
 
 <div class="card">
     <h2>Kirim Undangan</h2>
-    <p>Ketik nama tamu di bawah ini:</p>
+    <p>Ketik nama tamu & pilih media kirim:</p>
     
     <input type="text" id="namaTamu" placeholder="Contoh: Nama Tamu">
     
@@ -36,9 +35,9 @@
         <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
     </button>
 
-    <a href="https://www.instagram.com/bernaung.inv/" target="_blank" class="btn-ig">
-        <i class="fab fa-instagram"></i> Kunjungi Instagram Kami
-    </a>
+    <button class="btn-ig" onclick="kirimIG()">
+        <i class="fab fa-instagram"></i> Salin Link & Buka IG
+    </button>
 
     <div class="footer-text">Bernaung Invitation</div>
 </div>
