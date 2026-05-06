@@ -1,3 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Link Undangan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { font-family: sans-serif; background: #fdfaf6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; border-top: 5px solid #5A0000; }
+        h2 { font-family: 'Playball', cursive; color: #5A0000; font-size: 30px; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline-color: #5A0000; }
+        
+        .btn-wa { background: #25D366; color: white; border: none; padding: 15px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; margin-bottom: 10px; display: block; text-decoration: none; }
+        .btn-wa:hover { background: #128C7E; transform: translateY(-2px); }
+        
+        /* Gaya tombol Instagram */
+        .btn-ig { background: #E1306C; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px; transition: 0.3s; display: block; text-decoration: none; box-sizing: border-box; }
+        .btn-ig:hover { background: #C13584; transform: translateY(-2px); }
+        
+        .footer-text { margin-top: 20px; font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Kirim Undangan</h2>
+    <p>Ketik nama tamu di bawah ini:</p>
+    
+    <input type="text" id="namaTamu" placeholder="Contoh: Nama Tamu">
+    
+    <button class="btn-wa" onclick="kirimWA()">
+        <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
+    </button>
+
+    <a href="https://www.instagram.com/bernaung.inv/" target="_blank" class="btn-ig">
+        <i class="fab fa-instagram"></i> Kunjungi Instagram Kami
+    </a>
+
+    <div class="footer-text">Bernaung Invitation</div>
+</div>
+
 <script>
     function kirimWA() {
         const nama = document.getElementById('namaTamu').value;
